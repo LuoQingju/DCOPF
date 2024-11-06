@@ -4,7 +4,7 @@ dcopf_yalmip: yalmip modeling, gurobi solving
 
 dcopf_gurobi: Directly call gurobi to solve
 
-Dependency libraries: yalmip, gurobi, matpower
+Dependency libraries: matlab-R2023b, yalmip-R20230622, gurobi10.0.1, matpower7.1
 
 %Author: Qingju Luo
 %Email: luoqingju@qq.com
@@ -20,7 +20,7 @@ For learning and communication only!!!
 dcopf_yalmip：yalmip建模，gurobi求解
 dcopf_gurobi：直接调用gurobi求解
 
-依赖库：yalmip、gurobi、matpower
+依赖库：matlab-R2023b, yalmip-R20230622, gurobi10.0.1, matpower7.1
 
 % 作者：罗清局
 % 邮箱：luoqingju@qq.com
