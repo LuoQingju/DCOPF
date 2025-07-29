@@ -1,11 +1,9 @@
-%% Ö±Á÷×îÓÅ³±Á÷ DC Optimal Power Flow
+%% ç›´æµæœ€ä¼˜æ½®æµ DC Optimal Power Flow
 
 %% GUROBI
 
-% ×÷Õß£ºÂŞÇå¾Ö
-% ÓÊÏä£ºluoqingju@qq.com
-% »ªÄÏÀí¹¤´óÑ§µçÁ¦Ñ§Ôº
-% ×ÛºÏÖÇ»ÛÄÜÔ´ÏµÍ³ÓÅ»¯ÔËĞĞÓë¿ØÖÆÍÅ¶Ó ISESOOC °®Ë¼¿Æ
+% ä½œè€…ï¼šç½—æ¸…å±€
+% é‚®ç®±ï¼šluoqingju@qq.com
 
 clc
 clear
@@ -58,71 +56,71 @@ mpc0 = case14;
 % mpc0 = case_ACTIVSg25k;
 % mpc0 = case_ACTIVSg70k;
 
-%% ³õÊ¼»¯ËãÀıÊı¾İ
+%% åˆå§‹åŒ–ç®—ä¾‹æ•°æ®
 init_case;
 
-%% ¾ö²ß±äÁ¿Ë÷Òı
-nx = 0; % ±äÁ¿Êı
-idx_x_Pg = nx + (1:ng)'; % »ú×é³öÁ¦Ë÷Òı
+%% å†³ç­–å˜é‡ç´¢å¼•
+nx = 0; % å˜é‡æ•°
+idx_x_Pg = nx + (1:ng)'; % æœºç»„å‡ºåŠ›ç´¢å¼•
 nx = nx + ng;
-idx_x_Pl = nx + (1:nl)'; % ÏßÂ·ÓĞ¹¦Ë÷Òı
+idx_x_Pl = nx + (1:nl)'; % çº¿è·¯æœ‰åŠŸç´¢å¼•
 nx = nx + nl;
-idx_x_Va = nx + (1:nb)'; % µçÑ¹Ïà½ÇË÷Òı
+idx_x_Va = nx + (1:nb)'; % ç”µå‹ç›¸è§’ç´¢å¼•
 nx = nx + nb;
 
-%% Ô¼ÊøÌõ¼şË÷Òı
+%% çº¦æŸæ¡ä»¶ç´¢å¼•
 
-ne = 0; % µÈÊ½Ô¼ÊøÊı
-idx_e_bus = ne + (1:nb)'; % ½Úµã¹¦ÂÊÆ½ºâÔ¼ÊøË÷Òı
+ne = 0; % ç­‰å¼çº¦æŸæ•°
+idx_e_bus = ne + (1:nb)'; % èŠ‚ç‚¹åŠŸç‡å¹³è¡¡çº¦æŸç´¢å¼•
 ne = ne + nb;
-idx_e_Pl = ne + (1:nl)'; % ÏßÂ·¹¦ÂÊÔ¼ÊøË÷Òı
+idx_e_Pl = ne + (1:nl)'; % çº¿è·¯åŠŸç‡çº¦æŸç´¢å¼•
 ne = ne + nl;
-idx_e_Va_ref = ne + 1; % Æ½ºâ½ÚµãµçÑ¹Ïà½ÇÔ¼ÊøË÷Òı
+idx_e_Va_ref = ne + 1; % å¹³è¡¡èŠ‚ç‚¹ç”µå‹ç›¸è§’çº¦æŸç´¢å¼•
 ne = ne + 1;
 
-ni = 0; % ²»µÈÊ½Ô¼ÊøÊı
-% ±äÁ¿µÄÉÏÏÂÏŞÔ¼Êø¿ÉÒÔÖ±½ÓÊäÈëµ½gurobiÖĞ£¬Ò»°ã²»ĞèÒªĞ´Îª²»µÈÊ½Ô¼Êø
+ni = 0; % ä¸ç­‰å¼çº¦æŸæ•°
+% å˜é‡çš„ä¸Šä¸‹é™çº¦æŸå¯ä»¥ç›´æ¥è¾“å…¥åˆ°gurobiä¸­ï¼Œä¸€èˆ¬ä¸éœ€è¦å†™ä¸ºä¸ç­‰å¼çº¦æŸ
 
-%% Ô¼ÊøÌõ¼ş
-Ae = sparse(ne, nx); % µÈÊ½Ô¼Êø Ae * x = be
-be = zeros(ne, 1); % µÈÊ½Ô¼Êø Ae * x = be
-Ai = sparse(ni, nx); % ²»µÈÊ½Ô¼Êø Ai * x <= bi
-bi = zeros(ni, 1); % ²»µÈÊ½Ô¼Êø Ai * x <= bi
+%% çº¦æŸæ¡ä»¶
+Ae = sparse(ne, nx); % ç­‰å¼çº¦æŸ Ae * x = be
+be = zeros(ne, 1); % ç­‰å¼çº¦æŸ Ae * x = be
+Ai = sparse(ni, nx); % ä¸ç­‰å¼çº¦æŸ Ai * x <= bi
+bi = zeros(ni, 1); % ä¸ç­‰å¼çº¦æŸ Ai * x <= bi
 
-% cons = [cons, Cg * Pg - Cl * Pl == Pd + Gs]; % ½Úµã¹¦ÂÊÆ½ºâ
+% cons = [cons, Cg * Pg - Cl * Pl == Pd + Gs]; % èŠ‚ç‚¹åŠŸç‡å¹³è¡¡
 Ae(idx_e_bus, idx_x_Pg) = Cg;
 Ae(idx_e_bus, idx_x_Pl) = -Cl;
 be(idx_e_bus) = Pd + Gs;
 
-% cons = [cons, Pl == Cl' * Va ./ BR_x + Pfinj]; % ÏßÂ·¹¦ÂÊÔ¼Êø
+% cons = [cons, Pl == Cl' * Va ./ BR_x + Pfinj]; % çº¿è·¯åŠŸç‡çº¦æŸ
 Ae(idx_e_Pl, idx_x_Pl) = speye(nl);
 Ae(idx_e_Pl, idx_x_Va) = -sparse(1:nl, 1:nl, 1./BR_x, nl, nl) * Cl';
 be(idx_e_Pl) = Pfinj;
 
-% cons = [cons, Va(slack) == Va_ref]; % Æ½ºâ½ÚµãµçÑ¹Ïà½ÇÔ¼Êø
+% cons = [cons, Va(slack) == Va_ref]; % å¹³è¡¡èŠ‚ç‚¹ç”µå‹ç›¸è§’çº¦æŸ
 Ae(idx_e_Va_ref, idx_x_Va(slack)) = 1;
 be(idx_e_Va_ref) = Va_ref;
 
-%% ±äÁ¿ÉÏÏÂÏŞ
-lb = -Inf(nx, 1); % ³õÊ¼»¯±äÁ¿ÉÏÏÂÏŞ
+%% å˜é‡ä¸Šä¸‹é™
+lb = -Inf(nx, 1); % åˆå§‹åŒ–å˜é‡ä¸Šä¸‹é™
 ub = Inf(nx, 1);
 
-% cons = [cons, Pmin <= Pg <= Pmax]; %#ok<*CHAIN> % ·¢µç»ú¹¦ÂÊÉÏÏÂÏŞ
-lb(idx_x_Pg) = Pmin; % ·¢µç»ú¹¦ÂÊÉÏÏÂÏŞ
+% cons = [cons, Pmin <= Pg <= Pmax]; %#ok<*CHAIN> % å‘ç”µæœºåŠŸç‡ä¸Šä¸‹é™
+lb(idx_x_Pg) = Pmin; % å‘ç”µæœºåŠŸç‡ä¸Šä¸‹é™
 ub(idx_x_Pg) = Pmax;
 
-% cons = [cons, -flow_max <= Pl <= flow_max]; % ÏßÂ·¹¦ÂÊÉÏÏÂÏŞ
-lb(idx_x_Pl) = -flow_max; % ÏßÂ·¹¦ÂÊÉÏÏÂÏŞ
+% cons = [cons, -flow_max <= Pl <= flow_max]; % çº¿è·¯åŠŸç‡ä¸Šä¸‹é™
+lb(idx_x_Pl) = -flow_max; % çº¿è·¯åŠŸç‡ä¸Šä¸‹é™
 ub(idx_x_Pl) = flow_max;
 
-%% Ä¿±êº¯Êı
-% obj = (Pg .* Qpg)' * Pg + cpg' * Pg + sum(kpg); % ·¢µç³É±¾
+%% ç›®æ ‡å‡½æ•°
+% obj = (Pg .* Qpg)' * Pg + cpg' * Pg + sum(kpg); % å‘ç”µæˆæœ¬
 Q = sparse(nx, nx);
 Q(idx_x_Pg, idx_x_Pg) = sparse(1:ng, 1:ng, Qpg, ng, ng);
 c = zeros(nx, 1);
 c(idx_x_Pg) = cpg;
 
-%% Çó½â
+%% æ±‚è§£
 model.Q = Q;
 model.obj = c;
 model.A = [Ai; Ae];
@@ -147,18 +145,18 @@ Pg = x(idx_x_Pg);
 Pl = x(idx_x_Pl);
 Va = x(idx_x_Va);
 
-%% ÓëMATPOWER¶Ô±È
+%% ä¸MATPOWERå¯¹æ¯”
 res = rundcopf(mpc0);
 
-disp('ÏµÍ³×Ü³É±¾¾ø¶ÔÎó²î£º')
+disp('ç³»ç»Ÿæ€»æˆæœ¬ç»å¯¹è¯¯å·®ï¼š')
 disp(norm(res.f-obj))
-disp('ÏµÍ³×Ü³É±¾Ïà¶ÔÎó²î£º')
+disp('ç³»ç»Ÿæ€»æˆæœ¬ç›¸å¯¹è¯¯å·®ï¼š')
 disp(norm((res.f - obj)/res.f))
 
-% ¿ÉÄÜÓĞ¶à¸ö×îÓÅ½â£¬ËùÒÔ×îÓÅ½â¿ÉÄÜ²»Ò»Ñù
-% disp('·¢µç»ú³öÁ¦¾ø¶ÔÎó²î£º')
+% å¯èƒ½æœ‰å¤šä¸ªæœ€ä¼˜è§£ï¼Œæ‰€ä»¥æœ€ä¼˜è§£å¯èƒ½ä¸ä¸€æ ·
+% disp('å‘ç”µæœºå‡ºåŠ›ç»å¯¹è¯¯å·®ï¼š')
 % disp(norm( res.gen(res.gen(:, GEN_STATUS)>0, PG)./mpc0.baseMVA - Pg ))
-% disp('ÏßÂ·ÓĞ¹¦¹¦ÂÊ¾ø¶ÔÎó²î£º')
+% disp('çº¿è·¯æœ‰åŠŸåŠŸç‡ç»å¯¹è¯¯å·®ï¼š')
 % disp(norm( res.branch(res.branch(:, BR_STATUS)==1, PF)./mpc0.baseMVA - Pl ))
-% disp('µçÑ¹Ïà½Ç¾ø¶ÔÎó²î£º')
+% disp('ç”µå‹ç›¸è§’ç»å¯¹è¯¯å·®ï¼š')
 % disp(norm( res.bus(:, VA)./180.*pi - Va ))
