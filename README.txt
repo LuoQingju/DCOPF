@@ -8,8 +8,6 @@ Dependency libraries: matlab-R2023b, yalmip-R20230622, gurobi10.0.1, matpower7.1
 
 %Author: Qingju Luo
 %Email: luoqingju@qq.com
-%School of Electric Power Engineering, South China University of Technology
-%Integrated Smart Energy System Optimal Operation and Control, ISESOOC
 
 For learning and communication only!!!
 For learning and communication only!!!
@@ -24,8 +22,6 @@ dcopf_gurobi：直接调用gurobi求解
 
 % 作者：罗清局
 % 邮箱：luoqingju@qq.com
-% 华南理工大学电力学院
-% 综合智慧能源系统优化运行与控制团队 ISESOOC 爱思科
 
 仅供学习交流使用！！！
 仅供学习交流使用！！！
